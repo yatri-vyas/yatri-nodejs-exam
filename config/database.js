@@ -6,7 +6,7 @@ try {
     await mongoose.connect(envConfig.MONGODB_URL);
     console.log("database connect.")
 } catch (error) {
-    console.log(error)
+    console.log(error);
 }
 }
 
