@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import envconfig from "../config/envConfig.js"
+import jsonwebtoken from "jsonwebtoken";
 
 const userController = {
 
@@ -31,7 +32,15 @@ const userController = {
             const matchPassword = await bcrypt.compare(password, data.password);
             if (!matchPassword) return res.json({ message: "Password Does Not Match ." });
 
-            return res.status(200).json({ success: true, message: "User Login Successfully." });
+            const payload = {
+                id : data.id,
+                name : data.name,
+                role : data.role
+            }
+
+            const token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : '1h'});
+
+            return res.status(200).json({ success: true, message: "User Login Successfully.", token });
 
         } catch (error) {
             console.log(error.message);
